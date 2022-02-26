@@ -1,0 +1,3 @@
+describe("Recipe", () => {});
+
+export {};
