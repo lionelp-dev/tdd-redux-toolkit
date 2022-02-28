@@ -1,11 +1,22 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { recipeSlice } from "../recipe/application/recipe-slice";
+import {
+  AnyAction,
+  combineReducers,
+  configureStore,
+  EnhancedStore,
+} from "@reduxjs/toolkit";
+import { ThunkMiddleware } from "redux-thunk";
+import { recipeSlice } from "../recipe/domain/recipe-slice";
 
 export const rootReducer = combineReducers({
   recipes: recipeSlice.reducer,
 });
-export type RootState = ReturnType<typeof rootReducer>;
 
-export const store = configureStore({
-  reducer: rootReducer,
-});
+export const makeStore = () => {
+  const store = configureStore({
+    reducer: rootReducer,
+  });
+  return store;
+};
+
+export type RootState = ReturnType<typeof rootReducer>;
+export type RootStore = EnhancedStore<RootState, AnyAction, [ThunkMiddleware]>;

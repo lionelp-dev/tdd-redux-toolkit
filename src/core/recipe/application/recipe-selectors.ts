@@ -1,12 +1,18 @@
-import { rootReducer, store } from "../../redux/store";
+import { EntitySelectors } from "@reduxjs/toolkit";
+import { RootState, RootStore } from "../../redux/store";
 import { recipeAdapter } from "../domain/recipe-usecases";
 
-export const recipeSelectors = recipeAdapter.getSelectors<
-  ReturnType<typeof rootReducer>
->((state) => {
-  return state.recipes;
-});
-
-export const selectAllRecipes = () => {
-  return recipeSelectors.selectAll(store.getState());
-};
+export type Selector = EntitySelectors<any, RootState>;
+export class RecipeSelectors {
+  selectors: Selector;
+  store: RootStore;
+  constructor(store: RootStore) {
+    this.selectors = recipeAdapter.getSelectors<RootState>((state) => {
+      return state.recipes;
+    });
+    this.store = store;
+  }
+  selectAll = () => {
+    return this.selectors.selectAll(this.store.getState());
+  };
+}

@@ -1,14 +1,22 @@
-import { selectAllRecipes } from "../application/recipe-selectors";
-import { fetchRecipes } from "../domain/recipe-usecases";
-import { store } from "../../redux/store";
+import { RecipeSelectors } from "../application/recipe-selectors";
+import { makeStore } from "../../redux/store";
+import * as useCases from "../domain/recipe-usecases";
+
+const makeSut = () => {
+  const store = makeStore();
+  const recipeSelectors = new RecipeSelectors(store);
+  return { store, recipeSelectors };
+};
 
 describe("Recipe", () => {
   it("should return an empty list of recipe", () => {
-    expect(selectAllRecipes()).toEqual([]);
+    const { recipeSelectors } = makeSut();
+    expect(recipeSelectors.selectAll()).toEqual([]);
   });
   it("should return a list of many recipes", async () => {
+    const { store, recipeSelectors } = makeSut();
     await store.dispatch(
-      fetchRecipes([
+      useCases.fetchRecipes([
         {
           id: 1,
           name: "columbo",
@@ -19,7 +27,7 @@ describe("Recipe", () => {
         },
       ])
     );
-    expect(selectAllRecipes()).toEqual([
+    expect(recipeSelectors.selectAll()).toEqual([
       {
         id: 1,
         name: "columbo",

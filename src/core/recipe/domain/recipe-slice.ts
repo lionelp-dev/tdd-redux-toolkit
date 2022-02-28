@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchRecipes, recipeAdapter } from "../domain/recipe-usecases";
+import { fetchRecipes, recipeAdapter } from "./recipe-usecases";
 
 export const recipeSlice = createSlice({
   name: "recipes",
